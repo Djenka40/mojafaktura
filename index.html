@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MojaFaktura — Fakturisanje za srpske preduzetnike</title>
+<meta name="description" content="Desktop app za fakturisanje, KPO knjigu, rashode i godišnji obračun. Jednokratna uplata 4.590 RSD — bez pretplate zauvijek.">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1a1a1a; background: #fff; }
+  
+  /* NAV */
+  nav { position: fixed; top:0; left:0; right:0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #eee; z-index: 100; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { font-size: 20px; font-weight: 700; color: #185FA5; }
+  .logo span { color: #f0a500; }
+  .nav-cta { background: #185FA5; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px; }
+  .nav-cta:hover { background: #1450a0; }
+
+  /* HERO */
+  .hero { padding: 140px 40px 80px; text-align: center; background: linear-gradient(180deg, #f0f7ff 0%, #fff 100%); }
+  .hero-badge { display: inline-block; background: #e8f0fe; color: #185FA5; padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 24px; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: #0a0a0a; }
+  .hero h1 span { color: #185FA5; }
+  .hero p { font-size: 20px; color: #555; max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+  .btn-primary { background: #185FA5; color: #fff; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 17px; display: inline-block; }
+  .btn-primary:hover { background: #1450a0; }
+  .btn-secondary { background: #fff; color: #185FA5; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 17px; border: 2px solid #185FA5; display: inline-block; }
+  .hero-screen { max-width: 900px; margin: 0 auto; background: #1a1a2e; border-radius: 16px; padding: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.15); }
+  .hero-screen-bar { display: flex; gap: 6px; margin-bottom: 10px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #ffbd2e; }
+  .dot-g { background: #28c840; }
+  .hero-screen img { width: 100%; border-radius: 8px; }
+  .hero-screen-placeholder { background: #185FA5; border-radius: 8px; height: 480px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; opacity: 0.8; }
+
+  /* FEATURES */
+  .features { padding: 80px 40px; max-width: 1100px; margin: 0 auto; }
+  .section-title { text-align: center; font-size: 36px; font-weight: 700; margin-bottom: 12px; }
+  .section-sub { text-align: center; color: #666; font-size: 18px; margin-bottom: 56px; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .feature-card { background: #f8f9fa; border-radius: 16px; padding: 32px; border: 1px solid #eee; }
+  .feature-icon { font-size: 36px; margin-bottom: 16px; }
+  .feature-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+  .feature-card p { color: #666; line-height: 1.6; }
+
+  /* PRICING */
+  .pricing { padding: 80px 40px; background: #f0f7ff; }
+  .pricing-inner { max-width: 500px; margin: 0 auto; text-align: center; }
+  .price-card { background: #fff; border-radius: 20px; padding: 48px 40px; box-shadow: 0 8px 40px rgba(24,95,165,0.12); border: 2px solid #185FA5; }
+  .price-badge { background: #185FA5; color: #fff; padding: 6px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 24px; }
+  .price { font-size: 56px; font-weight: 800; color: #185FA5; }
+  .price-sub { font-size: 18px; color: #888; margin-bottom: 8px; }
+  .price-rsd { font-size: 22px; color: #555; margin-bottom: 32px; font-weight: 600; }
+  .price-features { list-style: none; text-align: left; margin-bottom: 36px; }
+  .price-features li { padding: 10px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px; font-size: 15px; }
+  .price-features li:last-child { border: none; }
+  .check { color: #27500A; font-size: 18px; font-weight: 700; }
+  .btn-buy { display: block; background: #185FA5; color: #fff; padding: 18px; border-radius: 12px; font-size: 18px; font-weight: 700; text-decoration: none; margin-bottom: 16px; }
+  .btn-buy:hover { background: #1450a0; }
+  .price-note { font-size: 13px; color: #999; }
+
+  /* PAYMENT */
+  .payment { padding: 80px 40px; max-width: 700px; margin: 0 auto; }
+  .payment h2 { text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 12px; }
+  .payment-sub { text-align: center; color: #666; margin-bottom: 40px; font-size: 16px; }
+  .payment-steps { counter-reset: step; }
+  .payment-step { display: flex; gap: 20px; margin-bottom: 32px; align-items: flex-start; }
+  .step-num { background: #185FA5; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+  .step-content h4 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+  .step-content p { color: #666; font-size: 15px; line-height: 1.6; }
+  .bank-info { background: #f0f7ff; border-radius: 12px; padding: 20px 24px; margin-top: 12px; font-size: 14px; }
+  .bank-info div { margin-bottom: 6px; }
+  .bank-info strong { color: #185FA5; }
+
+  /* FAQ */
+  .faq { padding: 80px 40px; max-width: 700px; margin: 0 auto; }
+  .faq h2 { text-align: center; font-size: 32px; font-weight: 700; margin-bottom: 48px; }
+  .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+  .faq-item h4 { font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .faq-item p { color: #666; font-size: 15px; line-height: 1.6; }
+
+  /* FOOTER */
+  footer { background: #0a0a0a; color: #999; padding: 40px; text-align: center; font-size: 14px; }
+  footer a { color: #185FA5; text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 32px; }
+    .hero { padding: 120px 20px 60px; }
+    nav { padding: 0 20px; }
+    .features, .pricing, .payment, .faq { padding: 60px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Moja<span>Faktura</span></div>
+  <a href="#kupovina" class="nav-cta">Kupi — 4.590 RSD</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">🇷🇸 Desktop app za srpske preduzetnike</div>
+  <h1>Fakturisanje koje <span>zaista radi</span><br>za tebe</h1>
+  <p>KPO knjiga, PDF fakture, slanje emailom, godišnji obračun — sve na jednom mestu. Bez pretplate, bez oblaka, bez komplikacija.</p>
+  <div class="hero-btns">
+    <a href="#kupovina" class="btn-primary">Kupi za 4.590 RSD →</a>
+    <a href="#features" class="btn-secondary">Pogledaj funkcije</a>
+  </div>
+  <div class="hero-screen">
+    <div class="hero-screen-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+    <div class="hero-screen-placeholder">
+      📊 MojaFaktura — Screenshot aplikacije
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-title">Sve što trebaš za poslovanje</div>
+  <div class="section-sub">Napravljeno specifično za srpske preduzetnike i firme</div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🧾</div>
+      <h3>Izlazne fakture</h3>
+      <p>Kreiraj profesionalne PDF fakture za svakoga. Šalji emailom direktno iz aplikacije. Latinica i ćirilica.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📓</div>
+      <h3>KPO knjiga</h3>
+      <p>Automatsko vođenje KPO knjige za paušalce. Export u Excel za računovođu.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧮</div>
+      <h3>PDV evidencija</h3>
+      <p>KIF i KUF knjige za PDV obveznike. Pregled PDV obaveze po kvartalima.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💸</div>
+      <h3>Rashodi i troškovi</h3>
+      <p>Evidencija svih poslovnih troškova po kategorijama. Zakup, plate, materijal i još mnogo.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📅</div>
+      <h3>Godišnji obračun</h3>
+      <p>Kompletan pregled prihoda i rashoda po godini. Priprema za računovođu u jednom kliku.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💾</div>
+      <h3>Radi offline</h3>
+      <p>Podaci su na tvom računaru — ne u oblaku. Backup i restore kad god hoćeš.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="kupovina">
+  <div class="pricing-inner">
+    <div class="section-title">Jedna cena, zauvek</div>
+    <div class="section-sub" style="margin-bottom:40px">Bez mesečnih pretplata. Bez iznenađenja.</div>
+    <div class="price-card">
+      <div class="price-badge">🏆 Doživotna licenca</div>
+      <div class="price">39€</div>
+      <div class="price-sub">jednokratno plaćanje</div>
+      <div class="price-rsd">ili 4.590 RSD</div>
+      <ul class="price-features">
+        <li><span class="check">✓</span> Neograničen broj faktura</li>
+        <li><span class="check">✓</span> Neograničen broj klijenata</li>
+        <li><span class="check">✓</span> PDF fakture + email slanje</li>
+        <li><span class="check">✓</span> KPO, KIF, KUF knjige</li>
+        <li><span class="check">✓</span> Godišnji obračun</li>
+        <li><span class="check">✓</span> Sve buduće verzije besplatno</li>
+        <li><span class="check">✓</span> Podrška putem emaila</li>
+      </ul>
+      <a href="mailto:djenka40@yahoo.com?subject=Kupovina MojaFaktura&body=Zdravo, zelim da kupim licencu za MojaFaktura." class="btn-buy">Kupi odmah →</a>
+      <div class="price-note">Licencni ključ stižeš na email u roku od 24h</div>
+    </div>
+  </div>
+</section>
+
+<section class="payment">
+  <h2>Kako kupiti?</h2>
+  <div class="payment-sub">Jednostavan proces u 3 koraka</div>
+  <div class="payment-steps">
+    <div class="payment-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Uplati na račun</h4>
+        <p>Uplati 4.590 RSD ili 39€ na jedan od računa ispod.</p>
+        <div class="bank-info">
+          <div><strong>Dinarski račun (RSD):</strong> 265-0000007595530-75</div>
+          <div><strong>Devizni račun (EUR):</strong> IBAN: RS35265044000012933242</div>
+          <div><strong>SWIFT/BIC:</strong> RZBSRSBG</div>
+          <div><strong>Banka:</strong> Raiffeisen banka</div>
+          <div><strong>Svrha:</strong> MojaFaktura licenca</div>
+        </div>
+      </div>
+    </div>
+    <div class="payment-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Pošalji potvrdu o uplati</h4>
+        <p>Pošalji screenshot ili PDF potvrde o uplati na email: <strong>djenka40@yahoo.com</strong></p>
+      </div>
+    </div>
+    <div class="payment-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Dobijaš licencni ključ i download link</h4>
+        <p>U roku od 24h šaljemo ti licencni ključ i link za preuzimanje aplikacije.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq">
+  <h2>Česta pitanja</h2>
+  <div class="faq-item">
+    <h4>Za koga je MojaFaktura?</h4>
+    <p>Za paušalce, preduzetnike, D.O.O. kompanije i sve koji trebaju jednostavno fakturisanje u Srbiji.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Da li radi na Windows-u?</h4>
+    <p>Da, MojaFaktura je Windows desktop aplikacija. Mac verzija je u planu.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Da li su moji podaci sigurni?</h4>
+    <p>Svi podaci se čuvaju lokalno na tvom računaru — nigde u oblaku. Ti kontrolišeš svoje podatke.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Šta ako izađe nova verzija?</h4>
+    <p>Sve buduće verzije su besplatne za kupce. Jedna kupovina — zauvek.</p>
+  </div>
+  <div class="faq-item">
+    <h4>Kako da aktiviram licencu?</h4>
+    <p>Nakon instalacije, uneseš licencni ključ koji dobijaš emailom. Proces traje manje od minute.</p>
+  </div>
+</section>
+
+<footer>
+  <div style="margin-bottom:12px">
+    <strong style="color:#fff">MojaFaktura</strong> — Fakturisanje za srpske preduzetnike
+  </div>
+  <div>Kontakt: <a href="mailto:djenka40@yahoo.com">djenka40@yahoo.com</a></div>
+  <div style="margin-top:12px">© 2026 MojaFaktura. Sva prava zadržana.</div>
+</footer>
+
+</body>
+</html>
